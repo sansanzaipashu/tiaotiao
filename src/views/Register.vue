@@ -1,0 +1,128 @@
+<template>
+  <div class="a">
+    <span class="txt">REGISTER</span>
+    <div class="ku">
+      <p class="aa">
+        <van-icon name="manager" />账号：<input type="text" v-model="tap" /></p>
+                <p class="aa"><van-icon name="manager" />昵称：<input type="text" v-model="tip" /></p>
+      <!-- 密码输入框 -->
+      <div class="mima">
+        <van-icon name="lock" size="20px" />密码：<input ref="passWord" type="password" v-model="passWord" v-show="!showPass" />
+        <input ref="passWord" type="text" v-model="passWord" v-show="showPass" />
+        <div @click="showPass = ! showPass" class="dis">
+          <span v-show="showPass">
+            <van-icon name="browsing-history" /></span>
+          <span v-show="!showPass">
+            <van-icon name="browsing-history" /></span>
+        </div>
+      </div>
+      <div class="forfet">
+        <button @click="zhuce()">注册</button>
+        <br>
+        <p class="zz"> 已有账号？<a @click="login">去登录</a></p>
+      </div>
+
+
+    </div>
+  </div>
+</template>
+
+<script>
+  import * as api from '../api/lg.js'
+  export default {
+    name: 'register',
+    data() {
+      return {
+        tap: '',
+        passWord: '',
+        showPass: false,
+        tip:'',
+      }
+    },
+    methods: {
+      thLoadding() {
+        var vm = this;
+        //获取密码
+        vm.passWord = vm.$refs.passWord.currentValue
+      },
+      login() {
+        this.$router.push("/login")
+      },
+      zhuce() {
+        let username = this.tap;
+        let passWord = this.passWord;
+        let nickName = this.tip;
+
+        api.getRet({
+          userName: username,
+          password: passWord,
+          nickName:nickName
+        }).then((data) => {
+          console.log(data)
+        })
+      }
+    }
+  }
+</script>
+
+<style scoped="">
+  .a {
+    background: pink;
+    height: 100vh;
+
+  }
+
+  .aa {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #666;
+    margin-top: 15px;
+    padding-left: 10px;
+  }
+
+  .ku {
+    width: 300px;
+    height: 200px;
+    background: white;
+    border-radius: 25px;
+    position: absolute;
+    left: 35px;
+    top: 200px;
+  }
+
+  input {
+    border: none;
+  }
+
+  .mima {
+    display: flex;
+    border-bottom: 1px solid #666;
+    margin-top: 30px;
+  }
+
+  .txt {
+    color: #fff;
+    font-size: 40px;
+    margin-left: 100px;
+
+  }
+
+  button {
+    width: 100px;
+    height: 40px;
+    background: orange;
+    border: none;
+    border-radius: 15px;
+    margin-left: 85px;
+    margin-top: 20px;
+
+  }
+
+  a {
+    color: red;
+  }
+
+  .zz {
+    margin-left: 130px;
+  }
+</style>
