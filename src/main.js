@@ -3,9 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import Vant from 'vant';
+import 'vant/lib/index.css';
+import 'lib-flexible/flexible'
 
 Vue.config.productionTip = false
-
+Vue.use(Vant)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
