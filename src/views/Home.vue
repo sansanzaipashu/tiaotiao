@@ -9,67 +9,14 @@
         <van-swipe-item><img src="../assets/swiper3.jpg" alt=""></van-swipe-item>
         <van-swipe-item><img src="../assets/swiper4.jpg" alt=""></van-swipe-item>
       </van-swipe>
-      <!-- 点击按钮 -->
-      <!-- <ul id="list">
-          <li><a><van-icon size="45" color="" name="chat" @click="tip()"/>二手书籍</a></li>
-          <li><a><van-icon size="45" color="" name="chat" />代取快递</a></li>
-          <li><a><van-icon size="45" color="" name="chat" />拼团团股</a></li>
-          <li><a><van-icon size="45" color="" name="chat" />愿望广场</a></li>
-          <li><a><van-icon size="45" color="" name="chat" />生活用品</a></li>
-          <li><a><van-icon size="45" color="" name="chat" />美味食品</a></li>
-          <li><a><van-icon size="45" color="" name="chat" />服饰箱包</a></li>
-          <li><a><van-icon size="45" color="" name="chat" />二手美妆</a></li>
-        
-      </ul> -->
       <van-grid square>
+        <!-- 选项 -->
       <van-grid-item
-        v-for="value in 1"
-        :key="value"
-        icon="chat"
-        text='二手书籍'
-        to="/book"
-      />
-      <van-grid-item
-        v-for="value in 1"
-        :key="value"
-        icon="photo-o"
-        text='代取快递'
-      />
-      <van-grid-item
-        v-for="value in 1"
-        :key="value"
-        icon="photo-o"
-        text='拼团团股'
-      />
-      <van-grid-item
-        v-for="value in 1"
-        :key="value"
-        icon="photo-o"
-        text='愿望广场'
-      />
-      <van-grid-item
-        v-for="value in 1"
-        :key="value"
-        icon="photo-o"
-        text='生活用品'
-      />
-      <van-grid-item
-        v-for="value in 1"
-        :key="value"
-        icon="photo-o"
-        text='美味食品'
-      />
-      <van-grid-item
-        v-for="value in 1"
-        :key="value"
-        icon="photo-o"
-        text='服饰箱包'
-      />
-      <van-grid-item
-        v-for="value in 1"
-        :key="value"
-        icon="photo-o"
-        text='二手美妆'
+        v-for="(item,index) in nav_item"
+        :key="index"
+        :icon="item.icon"
+        :text='item.title'
+        :to="item.goto"
       />
     </van-grid>
       <!-- 小广播 -->
@@ -83,19 +30,22 @@
       <van-row  type="flex"  justify="center">
         <van-col  span="8" >
           <div id="shi">
-            实名认证
+            <!-- 实名认证 -->
+            <img src="../assets/shiming.png" alt="" @click="rname">
           </div>
         </van-col>
         <van-col  span="8" >
           <div id="ping">
-            平台规则
+            <!-- 平台规则 -->
+            <img src="../assets/guize.png" alt="" @click="roul">
           </div>
 
         </van-col>
       </van-row>
       <!-- 最新发布 -->
   <h5 id="xin"><span></span><span>最新发布</span> </h5>
-  <ul id="shuju">
+  <!-- 数据 -->
+  <ul id="shuju" v-model="isLoading" @refresh="onRefresh" :disabled="true">
         <li v-for="item in data" @click="detail(item._id)">
             <img :src="item.coverImg" alt="">
             <p id="titel">{{item.descriptions}}</p>
@@ -117,7 +67,42 @@ name:'Home',
       return{
         value:"",
         title:"首页",
-        data:''
+        data:'',
+        isLoading: false,
+        nav_item:[{
+          title:"二手书籍",
+          icon:"chat",
+          goto:"/book",
+          color:"pink"
+        },{
+          title:"代取快递",
+          icon:"smile",
+          goto:"mall"
+        },{
+          title:"拼购团购",
+          icon:"bag",
+          goto:"/buy"
+        },{
+          title:"愿望广场",
+          icon:"star",
+          goto:"/wish"
+        },{
+          title:"生活用品",
+          icon:"shop-collect",
+          goto:"/life"
+        },{
+          title:"美味食品",
+          icon:"thumb-circle",
+          goto:"/foot"
+        },{
+          title:"服饰箱包",
+          icon:"invition",
+          goto:"/look"
+        },{
+          title:"二手美妆",
+          icon:"like",
+          goto:"/beauty"
+        }]
       }
     },
     methods:{
@@ -126,7 +111,20 @@ name:'Home',
       // }
       detail(id){
         this.$router.push('/detail/'+id)
+    },
+     onRefresh() {
+      setTimeout(() => {
+        this.$toast('刷新成功');
+        this.isLoading = false;
+      }, 500);
+    },
+    rname(){
+      this.$router.push("/rname")
+    },
+    roul(){
+      this.$router.push("/roul")
     }
+
     },
     mounted(){
       let n=Math.floor(Math.random()*10)+1;
@@ -135,7 +133,7 @@ name:'Home',
         per:i,
         page:n
       }).then((data)=>{
-        //   console.log(data.data.products);
+          // console.log(data.data.products);
           this.data=data.data.products;
       })
   }
@@ -143,7 +141,9 @@ name:'Home',
 </script>
 
 <style scoped="">
-
+html{
+  margin-bottom: 45px;
+}
     #container{
     margin-bottom: 50px;
   }
@@ -219,6 +219,7 @@ name:'Home',
   #ping img ,#shi img{
     width: 100%;
     height: 100%;
+    border-radius: 8px;
   }
   .van-col{
     height: 110px;
@@ -231,6 +232,10 @@ width: 50%;
 height: 230px;
 float: left;
 text-align: center;
+margin-bottom:5px;
+}
+#shuju{
+  margin-bottom:80px;
 }
 #shuju li img{
     width: 150px;
@@ -239,7 +244,7 @@ text-align: center;
 }
 #shuju li #titel{
   width: 100%;
-  white-space: normal;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   }

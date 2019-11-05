@@ -1,5 +1,6 @@
 <template>
   <div>
+      
       <!-- 标题 -->
       <van-nav-bar
   title="二手书屋"
@@ -8,21 +9,22 @@
   @click-left="onClickLeft"
   :fixed="true"
 />
+
 <!-- 点击栏 -->
     <div id="dianji">
         <van-row type="flex"  justify="center">
             <van-col span="9" height="50px">
-                <div id="bookSend">
+                <div id="bookSend" @click="send">
                     <!-- 发布旧书 -->
                     <img src="../assets/book1.jpg" alt="">
                 </div>
             </van-col>
             <van-col span="9" align="center">
-                <div id="bookRecover">
+                <div id="bookRecover" @click="cover">
                     <!-- 平台回收 -->
                     <img src="../assets/book3.jpg" alt="">
                 </div>
-                <div id="Survey">
+                <div id="Survey" @click="survey">
                     <!-- 问卷调查 -->
                     
                     <img src="../assets/book2.jpg" alt="">
@@ -30,23 +32,15 @@
             </van-col>
         </van-row>
     </div>
+    <!-- 下拉刷新 -->
+     <van-pull-refresh v-model="isLoading" @refresh="onRefresh" >
     <!-- 选项 -->
-    <nav id="wrap-list">
-		<p id="list" @click="add" >
-			<span class="add" @click="shu">教材教辅</span>
-			<span @click="shu">畅销小说</span>
-			<span @click="shu">文学文艺</span>
-			<span @click="shu">学习考试</span>
-			<span @click="shu">经管励志</span>
-			<span @click="shu">期刊杂志</span>
-            <!-- <van-col span="5">教材教辅</van-col>
-            <van-col span="5">畅销小说</van-col>
-            <van-col span="5">文学文艺</van-col>
-            <van-col span="5">学习考试</van-col>
-            <van-col span="5">经管励志</van-col>
-            <van-col span="5"></van-col> -->
-		</p>
-	</nav>
+
+    <van-tabs @click="shu">
+    <van-tab v-for="index in list" :title="index" title-active-color='palevioletred' >
+        
+    </van-tab>
+    </van-tabs>
     <!-- 数据 -->
     <ul id="shuju">
         <li v-for="item in data" @click="detail(item._id)">
@@ -57,6 +51,7 @@
             
         </li>
     </ul>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -70,12 +65,14 @@ export default {
     name:"Book",
     data(){
         return{
-            data:''
+            data:'',
+            list:['教材教辅','畅销小说','文学文艺','学习考试','经管励志','期刊杂志'],
+            isLoading: false
         }
     },
     methods: {
     onClickLeft() {
-      this.$router.go(-1)
+      this.$router.push('/home')
     },
     add(){
         $.each($('#list span'),(i,n)=>{
@@ -98,6 +95,29 @@ export default {
     },
     detail(id){
         this.$router.push('/detail/'+id)
+    },
+    send(){
+        this.$router.push('/bookSend')
+    },
+    cover(){
+        this.$toast('暂未开放，敬请期待');
+    },
+    survey(){
+        this.$router.push('/bookSurvey')
+    },onRefresh() {
+      setTimeout(() => {
+        this.$toast('刷新成功');
+        this.isLoading = false;
+        let n=Math.floor(Math.random()*10)+1;
+        let i=Math.floor(Math.random()*35)+15;
+        api.getBook({
+            per:i,
+            page:n
+        }).then((data)=>{
+            //   console.log(data.data.products);
+            this.data=data.data.products;
+        })
+      }, 500);
     }
 
   },
@@ -200,7 +220,7 @@ text-align: center;
 }
 #shuju li #titel{
   width: 100%;
-  white-space: normal;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   }

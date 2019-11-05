@@ -6,7 +6,8 @@ import router from './router'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import 'lib-flexible/flexible'
-
+import 'vant/lib/index.css'
+// import axios from 'axios';
 Vue.config.productionTip = false
 Vue.use(Vant)
 /* eslint-disable no-new */
