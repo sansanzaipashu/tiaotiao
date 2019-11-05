@@ -28,17 +28,26 @@
 
 <script>
   import * as api from '../api/lg.js'
+
+  import {
+    mapMutations
+  } from 'vuex';
+  import {
+    mapState
+  } from 'vuex';
   export default {
 
     name: 'login',
     data() {
       return {
-       tap:'',
+        tap: '',
         passWord: null,
         showPass: false,
+
       }
     },
     methods: {
+      ...mapMutations(['changeLogin']),
       thLoadding() {
         var vm = this;
         //获取密码
@@ -47,15 +56,26 @@
       register() {
         this.$router.push('/register')
       },
-      denglu(){
-           let username = this.tap;
-           let passWord = this.passWord;
-           api.DENGLU({
-             userName: username,
-             password: passWord,
-           }).then((data)=>{
-             console.log(data)
-           })
+      denglu() {
+        let username = this.tap;
+        let passWord = this.passWord;
+        api.DENGLU({
+          userName: username,
+          password: passWord,
+        }).then((data) => {
+          console.log(data.data.token)
+          this.token = 'Bearer ' + data.data.token
+          // console.log(this.token)
+          this.changeLogin({
+            Authorization: this.token
+          });
+          if(data.data.token==undefined){
+            alert("登录失败")
+          }else{this.$router.push('/home');
+          alert('登陆成功');}
+
+
+        })
       }
     }
   }

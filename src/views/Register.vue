@@ -82,7 +82,7 @@
 
   .ku {
     width: 300px;
-    height: 200px;
+    height: 280px;
     background: white;
     border-radius: 25px;
     position: absolute;

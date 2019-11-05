@@ -10,14 +10,22 @@ import My from '@/views/My';import Message from '@/views/Message';
 import Typ from '@/views/Typ';
 import Book from '@/views/Book';
 import Detail from '@/views/Detail';
+import Push from '@/views/Push';
+import Sell from '@/views/Sell';
+import Wish from '@/views/Wish';
+import Mall from '@/views/Mall';
+import Buy from '@/views/Buy';
+import Sug from '@/views/Sug';
+
+
 Vue.use(Router)
 
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
-      redirect:'/index',
+      redirect:'/login',
       name: 'HelloWorld',
       component: HelloWorld
     },
@@ -31,7 +39,7 @@ export default new Router({
           path:'/home',
           name:'home',
           component:Home,
-         
+
         },
         {
           path:'/my',
@@ -74,6 +82,51 @@ export default new Router({
      path:'/mine',
            name:'mine',
            component:Mine
+    },
+    {
+     path:'/push',
+           name:'Push',
+           component:Push
+    },
+    {
+     path:'/sell',
+           name:'Sell',
+           component:Sell
+    },
+    {
+     path:'/wish',
+           name:'Wish',
+           component:Wish
+    },
+    {
+     path:'/mall',
+           name:'Mall',
+           component:Mall
+    },
+    {
+     path:'/buy',
+           name:'Buy',
+           component:Buy
+    },
+    {
+     path:'/sug',
+           name:'Sug',
+           component:Sug
     }
   ]
-})
+});
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login') {
+    next();
+  } else {
+    let token = localStorage.getItem('Authorization');
+
+    if (token === 'null' || token === '') {
+      next('/login');
+    } else {
+      next();
+    }
+  }
+});
+
+export default router;

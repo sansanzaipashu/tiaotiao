@@ -10,3 +10,7 @@ export const DENGLU=(data)=>{
 export const getHeader=(data)=>{
     return API.Header('/api/v1/users/manager_info',data)
 }
+export const getUser=(data)=>{
+    return API.GET('/api/v1/users/info',data)
+}
+
